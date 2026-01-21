@@ -1,0 +1,38 @@
+# Apache Pulsar Helm Values (Simplified for Local K8s)
+
+# 로컬 리소스 절약을 위해 컴포넌트 최소화
+components:
+  zookeeper: true
+  bookkeeper: true
+  broker: true
+  proxy: true # 외부 접속용 프록시
+  autorecovery: false
+  toolset: true
+  pulsar_manager: false
+
+# 리소스 제한 (로컬 환경에 맞춰 타이트하게 설정)
+zookeeper:
+  replicaCount: 1 # HA 테스트 시 3으로 변경
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 0.1
+
+bookkeeper:
+  replicaCount: 2 # 최소 2개 필요 (Ensemble Size)
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 0.2
+
+broker:
+  replicaCount: 1 # HA 테스트 시 2~3으로 변경
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 0.2
+
+proxy:
+  replicaCount: 1
+  service:
+    type: LoadBalancer # 또는 NodePort

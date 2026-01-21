@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redpanda-test-client
+  labels:
+    app: redpanda-test
+spec:
+  containers:
+  - name: redpanda-rpk
+    image: redpandadata/redpanda:latest
+    command: ["/bin/sh", "-c", "sleep infinity"]
+    # rpk(Redpanda Keeper) CLI 사용을 위한 설정
+    env:
+    - name: REDPANDA_BROKERS
+      value: "redpanda-0.redpanda.redpanda.svc.cluster.local:9093,redpanda-1.redpanda.redpanda.svc.cluster.local:9093,redpanda-2.redpanda.redpanda.svc.cluster.local:9093"

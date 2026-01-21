@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rabbitmq-test-client
+  labels:
+    app: rabbitmq-test
+spec:
+  containers:
+  - name: rabbitmq-perf-test
+    image: pivotalrabbitmq/perf-test:latest
+    command: ["/bin/sh", "-c", "sleep infinity"]
+    env:
+    - name: URI
+      value: "amqp://user:password@rabbitmq:5672"

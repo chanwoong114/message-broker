@@ -1,0 +1,10 @@
+# Kafka UI Configuration
+yamlApplicationConfig:
+  kafka:
+    clusters:
+      - name: my-cluster
+        bootstrapServers: my-cluster-kafka-bootstrap:9092
+        properties:
+          security.protocol: PLAINTEXT
+        # 중요: JMX/Metrics 연결 실패로 인한 UI 멈춤 방지
+        disableMetrics: true

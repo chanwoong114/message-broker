@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-test-client
+  labels:
+    app: redis-test
+spec:
+  containers:
+  - name: redis-cli
+    image: bitnami/redis:latest
+    command: ["/bin/sh", "-c", "sleep infinity"]
+    env:
+    - name: REDISCLI_AUTH
+      value: "password"

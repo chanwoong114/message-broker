@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nats-test-client
+  labels:
+    app: nats-test
+spec:
+  containers:
+  - name: nats-box
+    image: natsio/nats-box:latest
+    command: ["/bin/sh", "-c", "sleep infinity"]
+    env:
+    - name: NATS_URL
+      value: "nats://nats:4222" # 서비스 이름에 맞게 수정 필요

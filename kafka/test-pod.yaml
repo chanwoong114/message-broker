@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kafka-test-client
+  labels:
+    app: kafka-test
+spec:
+  containers:
+  - name: kafka-client
+    image: quay.io/strimzi/kafka:0.40.0-kafka-3.6.1
+    command: ["/bin/sh", "-c", "sleep infinity"]
+    env:
+    - name: BOOTSTRAP_SERVER
+      value: "my-cluster-kafka-bootstrap:9092"

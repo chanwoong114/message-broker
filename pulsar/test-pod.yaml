@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pulsar-test-client
+  labels:
+    app: pulsar-test
+spec:
+  containers:
+  - name: pulsar-admin
+    image: apachepulsar/pulsar:latest
+    command: ["/bin/sh", "-c", "sleep infinity"]
+    env:
+    - name: PULSAR_SERVICE_URL
+      value: "pulsar://pulsar-proxy.pulsar.svc.cluster.local:6650"
+    - name: PULSAR_ADMIN_URL
+      value: "http://pulsar-proxy.pulsar.svc.cluster.local:8080"

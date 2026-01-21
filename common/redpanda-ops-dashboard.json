@@ -1,0 +1,115 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": 14676,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 2,
+      "panels": [],
+      "title": "Cluster Health",
+      "type": "row"
+    },
+    {
+      "datasource": "Prometheus",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 1 },
+      "id": 4,
+      "options": { 
+        "colorMode": "value", 
+        "graphMode": "none", 
+        "justifyMode": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
+      },
+      "pluginVersion": "7.3.7",
+      "targets": [ { "expr": "count(redpanda_uptime_seconds)", "refId": "A" } ],
+      "title": "Nodes Up",
+      "type": "stat"
+    },
+    {
+      "datasource": "Prometheus",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 1 },
+      "id": 6,
+      "options": { 
+        "colorMode": "value", 
+        "graphMode": "none",
+        "thresholds": { "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 1 } ] },
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
+      },
+      "targets": [ { "expr": "sum(redpanda_cluster_partition_under_replicated_replicas)", "refId": "A" } ],
+      "title": "Under-replicated Partitions",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+      "id": 10,
+      "panels": [],
+      "title": "Throughput (Traffic)",
+      "type": "row"
+    },
+    {
+      "datasource": "Prometheus",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+      "id": 12,
+      "targets": [
+        {
+          "expr": "sum(rate(redpanda_kafka_request_bytes_total{request=\"produce\"}[5m]))",
+          "legendFormat": "Bytes In",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(rate(redpanda_kafka_request_bytes_total{request=\"fetch\"}[5m]))",
+          "legendFormat": "Bytes Out",
+          "refId": "B"
+        }
+      ],
+      "title": "Throughput (Bytes/sec)",
+      "type": "graph",
+      "yaxes": [ { "format": "Bps", "show": true }, { "format": "short", "show": true } ]
+    },
+    {
+      "datasource": "Prometheus",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+      "id": 14,
+      "targets": [
+        {
+          "expr": "sum(rate(redpanda_kafka_request_messages_total{request=\"produce\"}[5m]))",
+          "legendFormat": "Msgs In",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(rate(redpanda_kafka_request_messages_total{request=\"fetch\"}[5m]))",
+          "legendFormat": "Msgs Out",
+          "refId": "B"
+        }
+      ],
+      "title": "Message Rate (Msgs/sec)",
+      "type": "graph",
+      "yaxes": [ { "format": "pps", "show": true }, { "format": "short", "show": true } ]
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 27,
+  "style": "dark",
+  "tags": ["redpanda", "ops"],
+  "time": { "from": "now-1h", "to": "now" },
+  "title": "Redpanda Ops Dashboard (Verified)",
+  "uid": "redpanda-ops-verified",
+  "version": 1
+}

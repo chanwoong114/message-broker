@@ -1,0 +1,33 @@
+statefulset:
+  replicas: 3
+
+listeners:
+  kafka:
+    external:
+      default:
+        enabled: true
+        advertisedPorts: [30092, 30093, 30094]
+
+external:
+  domain: localhost
+  addresses:
+    - localhost
+    - localhost
+    - localhost
+  service:
+    enabled: true
+
+tls:
+  enabled: false
+
+resources:
+  cpu:
+    cores: 1
+  memory:
+    container:
+      max: 1.5Gi
+
+storage:
+  persistentVolume:
+    enabled: true
+    size: 5Gi

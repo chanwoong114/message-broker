@@ -1,0 +1,49 @@
+# Kafka Helm Values (Bitnami Chart) for HA & External Access
+
+image:
+  registry: docker.io
+  repository: bitnami/kafka
+  tag: 3.9.0-debian-12-r0 # 명시적인 버전 지정
+
+# KRaft 모드 활성화 (Zookeeper 제거)
+kraft:
+  enabled: true
+
+# 브로커 및 컨트롤러 설정 (3-Node HA)
+controller:
+  replicaCount: 3
+  resources:
+    limits:
+      memory: 1Gi
+    requests:
+      memory: 512Mi
+  persistence:
+    enabled: true
+    size: 5Gi
+
+broker:
+  replicaCount: 3
+  persistence:
+    enabled: true
+    size: 5Gi
+
+# 리스너 설정
+listeners:
+  client:
+    protocol: PLAINTEXT
+  interbroker:
+    protocol: PLAINTEXT
+  external:
+    protocol: PLAINTEXT
+
+# 외부 접속 설정 (NodePort)
+# Kind의 kind-ha-config.yaml에서 30094:9094 매핑을 해두었습니다.
+# 첫 번째 브로커(kafka-controller-0)는 30094로 노출되어 localhost:9094로 접속 가능합니다.
+externalAccess:
+  enabled: true
+  controller:
+    service:
+      type: NodePort
+      nodePorts: [30094, 30095, 30096]
+      domain: localhost
+    forceHostPort: false

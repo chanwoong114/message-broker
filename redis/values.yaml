@@ -1,0 +1,21 @@
+# Redis (Valkey) Helm Values
+
+architecture: replication # Sentinel 모드
+
+sentinel:
+  enabled: true
+
+auth:
+  enabled: true
+  password: password
+
+master:
+  persistence:
+    enabled: true
+    size: 5Gi
+
+replica:
+  replicaCount: 3
+  persistence:
+    enabled: true
+    size: 5Gi
