@@ -1,5 +1,11 @@
 replicaCount: 3
 
+image:
+  registry: docker.io
+  repository: bitnami/rabbitmq
+  tag: latest
+  pullPolicy: IfNotPresent
+
 auth:
   username: user
   password: password
