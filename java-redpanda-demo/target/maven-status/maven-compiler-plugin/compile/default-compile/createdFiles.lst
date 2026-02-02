@@ -4,3 +4,4 @@ com/example/redpandademo/ProducerController.class
 com/example/redpandademo/TracingUtils.class
 com/example/redpandademo/TracingUtils$1.class
 com/example/redpandademo/ConsumerService.class
+com/example/redpandademo/KafkaConfig.class

@@ -2,8 +2,8 @@ replicaCount: 3
 
 image:
   registry: docker.io
-  repository: bitnami/rabbitmq
-  tag: latest
+  repository: rabbitmq
+  tag: 3.13-management
   pullPolicy: IfNotPresent
 
 auth:
@@ -20,11 +20,19 @@ metrics:
     labels:
       release: prometheus
 
+extraPlugins: "rabbitmq_stream"
+
 service:
   type: NodePort
   nodePorts:
     amqp: 30672
     manager: 31672
+    stream: 30552
+  extraPorts:
+  - name: stream
+    port: 5552
+    targetPort: stream
+    protocol: TCP
 
 resources:
   requests:

@@ -26,6 +26,11 @@ public class ProducerController {
         return sendOneMessage("Single Order");
     }
 
+    @org.springframework.web.bind.annotation.PostMapping("/producer/send")
+    public String sendMessage(@org.springframework.web.bind.annotation.RequestParam("message") String message) {
+        return sendOneMessage(message);
+    }
+
     @GetMapping("/bomb")
     public String bomb() {
         for (int i = 0; i < 1000; i++) {
@@ -39,8 +44,17 @@ public class ProducerController {
         try {
             ProducerRecord<String, String> record = new ProducerRecord<>("orders.new", content);
             tracingUtils.inject(Context.current().with(span), record.headers());
-            kafkaTemplate.send(record);
-            return "Sent: " + content;
+            
+            kafkaTemplate.send(record).whenComplete((result, ex) -> {
+                if (ex == null) {
+                    System.out.println("✅ SUCCESS: Sent '" + content + "' to partition " + result.getRecordMetadata().partition() 
+                        + " | TraceID: " + span.getSpanContext().getTraceId());
+                } else {
+                    System.out.println("❌ FAILURE: Failed to send '" + content + "': " + ex.getMessage());
+                }
+            });
+            
+            return "Sent request: " + content + " (TraceID: " + span.getSpanContext().getTraceId() + ")";
         } finally {
             span.end();
         }

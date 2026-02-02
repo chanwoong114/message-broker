@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: rabbitmq-monitor
+  namespace: rabbitmq
+  labels:
+    release: prometheus # 프로메테우스 오퍼레이터가 감시할 수 있도록 라벨 추가
+spec:
+  selector:
+    matchLabels:
+      app: rabbitmq
+  namespaceSelector:
+    any: true
+  endpoints:
+  - port: prometheus
+    path: /metrics
+    interval: 15s

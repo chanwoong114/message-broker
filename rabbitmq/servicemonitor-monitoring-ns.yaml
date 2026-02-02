@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: rabbitmq-monitor
+  namespace: monitoring  # 1. 위치를 monitoring으로 변경
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: rabbitmq
+  namespaceSelector:     # 2. 감시할 네임스페이스 지정
+    matchNames:
+    - rabbitmq
+  endpoints:
+  - port: prometheus
+    path: /metrics
+    interval: 15s

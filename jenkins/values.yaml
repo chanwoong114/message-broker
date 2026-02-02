@@ -1,0 +1,63 @@
+controller:
+  # 로컬 테스트용 비밀번호 고정
+  admin:
+    username: "admin"
+    password: "admin"
+  
+  # 외부 접속을 위해 NodePort 사용 (Kind 환경)
+  serviceType: NodePort
+  nodePort: 30000
+
+  # CSRF 보호 비활성화 (데모 API 호출 편의성 위함, 운영에선 켜야 함)
+  # javaOpts: "-Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true"
+
+  installPlugins:
+    - kubernetes:4212.v26b_16b_9815e3
+    - workflow-aggregator:596.v8c21c963d92d
+    - git:5.2.1
+    - configuration-as-code:1775.v810dc950b_514
+    - job-dsl:1.87
+
+  # CSRF 비활성화 (데모 API 호출용)
+  javaOpts: "-Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true"
+
+persistence:
+  enabled: false
+
+controller:
+  # JCasC 설정: 데모 파이프라인 자동 생성
+  JCasC:
+    defaultConfig: true
+    configScripts:
+      demo-config: |
+        jobs:
+          - script: >
+              pipelineJob('demo-pipeline') {
+                definition {
+                  cps {
+                    script('''
+                      pipeline {
+                        agent any
+                        parameters {
+                          string(name: 'REQUEST_ID', defaultValue: 'none', description: 'Request ID from Middleware')
+                          string(name: 'MESSAGE', defaultValue: 'none', description: 'Message content')
+                        }
+                        stages {
+                          stage('Receive') {
+                            steps {
+                              echo "Received Request ID: ${params.REQUEST_ID}"
+                              echo "Message: ${params.MESSAGE}"
+                            }
+                          }
+                          stage('Process') {
+                            steps {
+                              sh 'sleep 5' // 작업 시뮬레이션
+                              echo "Processing complete!"
+                            }
+                          }
+                        }
+                      }
+                    ''')
+                  }
+                }
+              } # 로컬 테스트이므로 스토리지 끄기 (빠른 시작)
